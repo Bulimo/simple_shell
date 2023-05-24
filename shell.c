@@ -1,97 +1,90 @@
 #include "shell.h"
-#define DELIMITERS " \t\0"
 
 /**
- * main - entry point
- * @ac: number of arguments passed
- * @av: array of strings of arguments passed
- * @env: the current environment
- * Return: 0 when EOF is reached - user presses Ctrl + D
+ * main - Simple Shell (Hsh)
+ * @argc: Argument Count
+ * @argv:Argument Value
+ * Return: Exit Value By Status
  */
-int main(int ac, char **av, char **env)
-{
-	char *line, *newline;
-	size_t len = 0;
-	ssize_t lineSize;
-	char **t_array;
-	int cmdnum = 0;
 
-	(void)ac, (void)av;
-	while (1)
+int main(__attribute__((unused)) int argc, char **argv)
+{
+	char *input, **cmd;
+	int counter = 0, statue = 1, st = 0;
+
+	if (argv[1] != NULL)
+		read_file(argv[1], argv);
+	signal(SIGINT, signal_to_handel);
+	while (statue)
 	{
-		line = NULL;
-		len = 0;
-		cmdnum++;
-		if (isatty(STDIN_FILENO) == 1)
-			shellPrompt();
-		signal(SIGINT, ctrlc_handler);
-		lineSize = getline(&line, &len, stdin);
-		if (lineSize == EOF || lineSize == -1)
-			return (ctrld_handler(line));
-		if (line[0] == '\n')
+		counter++;
+		if (isatty(STDIN_FILENO))
+			prompt();
+		input = _getline();
+		if (input[0] == '\0')
 		{
-			free(line);
 			continue;
 		}
-		newline = _realloc(line);
-		if (newline == NULL)
+		history(input);
+		cmd = parse_cmd(input);
+		if (_strcmp(cmd[0], "exit") == 0)
 		{
-			free(line);
-			return (0);
+			exit_bul(cmd, input, argv, counter);
 		}
-		t_array = tokenize(newline);
-		if (t_array == NULL)
+		else if (check_builtin(cmd) == 0)
 		{
-			free(line);
-			free(newline);
-			return (0);
+			st = handle_builtin(cmd, st);
+			free_all(cmd, input);
+			continue;
 		}
-		execute_cmd(t_array, env, av, line, newline, cmdnum);
-		free_all(line, newline, t_array);
+		else
+		{
+			st = check_cmd(cmd, input, counter, argv);
+
+		}
+		free_all(cmd, input);
 	}
+	return (statue);
 }
-
 /**
- * tokenize - splits user input into tokens and stores into array
- * @line: input string to split
+ * check_builtin - check builtin
  *
- * Return: array of strings(tokens)
+ * @cmd:command to check
+ * Return: 0 Succes -1 Fail
  */
-
-char **tokenize(char *line)
+int check_builtin(char **cmd)
 {
+	bul_t fun[] = {
+		{"cd", NULL},
+		{"help", NULL},
+		{"echo", NULL},
+		{"history", NULL},
+		{NULL, NULL}
+	};
 	int i = 0;
-	int t_count = 0;
-	char **t_array;
-	char *token, *t_copy;
-
-	if (line == NULL)
-		return (NULL);
-	while (*(line + i) != '\0')
+		if (*cmd == NULL)
 	{
-		if (line[i] != ' ' && (line[i + 1] == ' ' || line[i + 1] == '\0'
-				       || line[i + 1] == '\t'))
-			t_count++;
-		i++;
+		return (-1);
 	}
 
-	i = 0;
-	t_array = malloc(sizeof(char *) * (t_count + 1));
-	if (t_array == NULL)
-		return (NULL);
-	token = strtok(line, DELIMITERS);
-	while (token != NULL)
+	while ((fun + i)->command)
 	{
-		t_copy = _strdup(token);
-		if (t_copy == NULL)
-		{
-			free(t_array);
-			return (NULL);
-		}
-		*(t_array + i) = t_copy;
-		token = strtok(NULL, DELIMITERS);
+		if (_strcmp(cmd[0], (fun + i)->command) == 0)
+			return (0);
 		i++;
 	}
-	*(t_array + i) = NULL;
-	return (t_array);
+	return (-1);
+}
+/**
+ * creat_envi - Creat Array of Enviroment Variable
+ * @envi: Array of Enviroment Variable
+ * Return: Void
+ */
+void creat_envi(char **envi)
+{
+	int i;
+
+	for (i = 0; environ[i]; i++)
+		envi[i] = _strdup(environ[i]);
+	envi[i] = NULL;
 }
