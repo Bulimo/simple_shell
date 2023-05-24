@@ -15,7 +15,7 @@ input_t *readlines(input_t **head, int isterm)
 	if (head == NULL)
 		return (NULL);
 	if (isterm)
-		write(STDOUT_FILENO, "(s) ", 4);
+		write(STDOUT_FILENO, "$ ", 2);
 	/* loop through stdin buffer */
 	nread = getline(&user_input, &len, stdin);
 	while (nread != -1)
