@@ -9,20 +9,20 @@
  */
 char **_realloc(char **ptr, size_t *size)
 {
-	char **new;
+	char **new_ptr;
 	size_t i;
 
-	new = malloc(sizeof(char *) * ((*size) + 10));
-	if (new == NULL)
+	new_ptr = malloc(sizeof(char *) * ((*size) + 10));
+	if (new_ptr == NULL)
 	{
 		free(ptr);
 		return (NULL);
 	}
 	for (i = 0; i < (*size); i++)
 	{
-		new[i] = ptr[i];
+		new_ptr[i] = ptr[i];
 	}
 	*size += 10;
 	free(ptr);
-	return (new);
+	return (new_ptr);
 }

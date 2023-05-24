@@ -3,37 +3,51 @@
 
 /**
  * tokenize - tokenizes a buffer with a delimiter
- * @buffer: buffer to tokenize
+ * @input: buffer to tokenize
  * @delimiter: delimiter to tokenize along
  *
  * Return: pointer to an array of pointers to the tokens
  */
-char **tokenize(char *buffer, char *delimiter)
-{
-	char **tokens = NULL;
-	size_t i = 0, mcount = 10;
 
-	if (buffer == NULL)
-		return (NULL);
-	tokens = malloc(sizeof(char *) * mcount);
+char **tokenize(char *input, char *delimiter)
+{
+	size_t bufsize = 64, position = 0;
+	char **tokens = (char **)malloc(bufsize * sizeof(char *));
+	char *token, *input_copy = strdup(input);
+
 	if (tokens == NULL)
 	{
-		perror("Fatal Error");
-		return (NULL);
+		perror("Allocation error");
+		exit(1);
 	}
-	while ((tokens[i] = new_strtok(buffer, delimiter)) != NULL)
+	if (input_copy == NULL)
 	{
-		i++;
-		if (i == mcount)
+		perror("Allocation error");
+		exit(1);
+	}
+	token = strtok(input_copy, delimiter);
+	while (token != NULL)
+	{
+		tokens[position] = strdup(token);
+		if (tokens[position] == NULL)
 		{
-			tokens = _realloc(tokens, &mcount);
+			perror("Allocation error");
+			exit(1);
+		}
+		position++;
+		if (position >= bufsize)
+		{
+			bufsize += bufsize;
+			tokens = (char **)realloc(tokens, bufsize * sizeof(char *));
 			if (tokens == NULL)
 			{
-				perror("Fatal Error");
-				return (NULL);
+				perror("Allocation error");
+				exit(1);
 			}
 		}
-		buffer = NULL;
+		token = strtok(NULL, delimiter);
 	}
+	tokens[position] = NULL;
+	free(input_copy);
 	return (tokens);
 }
