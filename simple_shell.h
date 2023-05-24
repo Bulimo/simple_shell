@@ -35,5 +35,12 @@ int _putchar(char c);
 void printerr(const char *s, ...);
 void printnode(input_t **head);
 
+int _atoi(char *s);
+char *_strcat(char *dest, char *src);
+int _strcmp(char *s1, char *s2);
+char *_strcpy(char *dest, char *src);
+size_t _strlen(char *s);
+char *_strdup(char *src);
+char *_strncpy(char *dest, char *src, size_t n);
 
 #endif

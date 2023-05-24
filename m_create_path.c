@@ -11,21 +11,21 @@ char *create_path(char *command)
 	char *path_copy = NULL, *dir = NULL, *full_path = NULL;
 
 	if (access(command, X_OK) == 0)
-		return (strdup(command));
-	path_copy = strdup(path);
+		return (_strdup(command));
+	path_copy = _strdup(path);
 	dir = strtok(path_copy, ":");
 	while (dir)
 	{
-		full_path = malloc(sizeof(char) * strlen(command) * strlen(dir) + 2);
+		full_path = malloc(sizeof(char) * _strlen(command) * _strlen(dir) + 2);
 		if (full_path == NULL)
 		{
 			free(path_copy);
 			return (NULL);
 		}
 
-		strcpy(full_path, dir);
-		strcat(full_path, "/");
-		strcat(full_path, command);
+		_strcpy(full_path, dir);
+		_strcat(full_path, "/");
+		_strcat(full_path, command);
 		if (access(full_path, X_OK) == 0)
 		{
 			free(path_copy);

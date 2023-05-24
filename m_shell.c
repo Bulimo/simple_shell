@@ -21,7 +21,7 @@ int main(__attribute__((unused))int ac, char **av)
 		iter = head;
 		while (iter)
 		{
-			if (strcmp(iter->line, "exit") == 0)
+			if (_strcmp(iter->line, "exit") == 0)
 			{
 				freeinput_t(&head);
 				return (0);
