@@ -19,6 +19,7 @@
  * @env: environment variables
  * @count: count of commands entered
  * @argv: arguments at opening of shell
+ * @commands: commands to be executed
  * @status: exit status
  */
 typedef struct variables
