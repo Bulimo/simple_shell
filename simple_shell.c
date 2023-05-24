@@ -1,7 +1,6 @@
 #include "shell.h"
 
 /* global variable for ^C handling */
-unsigned int sig_flag;
 
 /**
  * sig_handler - handles ^C signal interupt
@@ -12,10 +11,7 @@ unsigned int sig_flag;
 static void sig_handler(int uuv)
 {
 	(void) uuv;
-	if (sig_flag == 0)
-		_puts("\n$ ");
-	else
-		_puts("\n");
+	_puts("\n$ ");
 }
 
 /**
@@ -39,10 +35,8 @@ int main(int argc __attribute__((unused)), char **argv, char **environment)
 		is_pipe = 1;
 	if (is_pipe == 0)
 		_puts("$ ");
-	sig_flag = 0;
 	while (getline(&(vars.buffer), &len_buffer, stdin) != -1)
 	{
-		sig_flag = 1;
 		vars.count++;
 		vars.commands = tokenize(vars.buffer, ";");
 		for (i = 0; vars.commands && vars.commands[i] != NULL; i++)
@@ -55,7 +49,6 @@ int main(int argc __attribute__((unused)), char **argv, char **environment)
 		}
 		free(vars.buffer);
 		free(vars.commands);
-		sig_flag = 0;
 		if (is_pipe == 0)
 			_puts("$ ");
 		vars.buffer = NULL;
