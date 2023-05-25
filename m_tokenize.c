@@ -9,12 +9,12 @@
  * Return: pointer to an array of pointers to the tokens
  */
 
-char **tokenize(char *buffer, char *delimiter)
+char **tokenize(char *input, char *delimiter)
 {
 	char **tokens = NULL;
 	size_t i = 0, mcount = 10;
 
-	if (buffer == NULL)
+	if (input == NULL)
 		return (NULL);
 	tokens = malloc(sizeof(char *) * mcount);
 	if (tokens == NULL)
@@ -22,7 +22,7 @@ char **tokenize(char *buffer, char *delimiter)
 		perror("Fatal Error");
 		return (NULL);
 	}
-	while ((tokens[i] = new_strtok(buffer, delimiter)) != NULL)
+	while ((tokens[i] = new_strtok(input, delimiter)) != NULL)
 	{
 		i++;
 		if (i == mcount)
@@ -34,7 +34,7 @@ char **tokenize(char *buffer, char *delimiter)
 				return (NULL);
 			}
 		}
-		buffer = NULL;
+		input = NULL;
 	}
 	return (tokens);
 }
