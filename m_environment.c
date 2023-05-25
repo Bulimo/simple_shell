@@ -19,8 +19,12 @@ char **make_env(char **env)
 		perror("Fatal Error");
 		exit(1);
 	}
-	for (i = 0; env[i] != NULL; i++)
+	i = 0;
+	while (env[i])
+	{
 		newenv[i] = _strdup(env[i]);
+		i++;
+	}
 	newenv[i] = NULL;
 	return (newenv);
 }
@@ -33,14 +37,13 @@ char **make_env(char **env)
  */
 void free_env(char **env)
 {
-	unsigned int i;
+	unsigned int i = 0;
 
-	for (i = 0; env[i] != NULL; i++)
-		free(env[i]);
+	while (env[i])
+		free(env[i++]);
 	free(env);
 }
 
-#include "shell.h"
 
 /**
  * add_key - create a new environment variable
@@ -50,7 +53,7 @@ void free_env(char **env)
  */
 void add_key(vars_t *vars)
 {
-	unsigned int i;
+	unsigned int i = 0;
 	char **newenv;
 
 	for (i = 0; vars->env[i] != NULL; i++)
@@ -62,8 +65,12 @@ void add_key(vars_t *vars)
 		vars->status = 127;
 		new_exit(vars);
 	}
-	for (i = 0; vars->env[i] != NULL; i++)
+	i = 0;
+	while (vars->env[i])
+	{
 		newenv[i] = vars->env[i];
+		i++;
+	}
 	newenv[i] = add_value(vars->av[1], vars->av[2]);
 	if (newenv[i] == NULL)
 	{
@@ -112,7 +119,7 @@ char **find_key(char **env, char *key)
  */
 char *add_value(char *key, char *value)
 {
-	unsigned int len1, len2, i, j;
+	unsigned int len1, len2, i = 0, j = 0;
 	char *new;
 
 	len1 = _strlen(key);
@@ -120,8 +127,12 @@ char *add_value(char *key, char *value)
 	new = malloc(sizeof(char) * (len1 + len2 + 2));
 	if (new == NULL)
 		return (NULL);
-	for (i = 0; key[i] != '\0'; i++)
+
+	while (key[i] != '\0')
+	{
 		new[i] = key[i];
+		i++;
+	}
 	new[i] = '=';
 	for (j = 0; value[j] != '\0'; j++)
 		new[i + 1 + j] = value[j];

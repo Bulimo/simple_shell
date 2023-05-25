@@ -16,7 +16,7 @@ void (*check_for_builtins(vars_t *vars))(vars_t *vars)
 		{NULL, NULL}
 	};
 
-	while(check[i].f)
+	while (check[i].f)
 	{
 		if (_strcmpr(vars->av[0], check[i].name) == 0)
 			break;
