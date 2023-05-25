@@ -7,7 +7,7 @@
  */
 void (*check_for_builtins(vars_t *vars))(vars_t *vars)
 {
-	unsigned int i;
+	unsigned int i = 0;
 	builtins_t check[] = {
 		{"exit", new_exit},
 		{"env", _env},
@@ -16,12 +16,13 @@ void (*check_for_builtins(vars_t *vars))(vars_t *vars)
 		{NULL, NULL}
 	};
 
-	for (i = 0; check[i].f != NULL; i++)
+	while(check[i].f)
 	{
 		if (_strcmpr(vars->av[0], check[i].name) == 0)
 			break;
+		i++;
 	}
-	if (check[i].f != NULL)
+	if (check[i].f)
 		check[i].f(vars);
 	return (check[i].f);
 }
@@ -64,12 +65,13 @@ void new_exit(vars_t *vars)
  */
 void _env(vars_t *vars)
 {
-	unsigned int i;
+	unsigned int i = 0;
 
-	for (i = 0; vars->env[i]; i++)
+	while (vars->env[i])
 	{
 		_puts(vars->env[i]);
 		_puts("\n");
+		i++;
 	}
 	vars->status = 0;
 }
