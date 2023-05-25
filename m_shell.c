@@ -24,10 +24,10 @@ int main(int argc __attribute__((unused)), char **argv, char **environment)
 {
 	size_t len_buffer = 0;
 	unsigned int is_pipe = 0;
-	vars_t vars = {NULL, NULL, NULL, 0, NULL, 0, NULL};
+	inputs_t vars = {NULL, NULL, NULL, 0, NULL, 0, NULL};
 
 	vars.argv = argv;
-	vars.env = make_env(environment);
+	vars.env = copy_env(environment);
 
 	signal(SIGINT, sig_handler);
 

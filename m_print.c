@@ -7,7 +7,7 @@
  *
  * Return: void
  */
-void print_error(vars_t *vars, char *msg)
+void print_error(inputs_t *vars, char *msg)
 {
 	char *count;
 

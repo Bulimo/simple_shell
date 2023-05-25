@@ -1,12 +1,12 @@
 #include "shell.h"
 
 /**
- * make_env - make the shell environment from the environment passed to main
+ * copy_env - make the shell environment from the environment passed to main
  * @env: environment passed to main
  *
  * Return: pointer to the new environment
  */
-char **make_env(char **env)
+char **copy_env(char **env)
 {
 	char **newenv = NULL;
 	size_t i;
@@ -51,7 +51,7 @@ void free_env(char **env)
  *
  * Return: void
  */
-void add_key(vars_t *vars)
+void add_key(inputs_t *vars)
 {
 	unsigned int i = 0;
 	char **newenv;
@@ -63,7 +63,7 @@ void add_key(vars_t *vars)
 	{
 		print_error(vars, NULL);
 		vars->status = 127;
-		new_exit(vars);
+		my_exit(vars);
 	}
 	i = 0;
 	while (vars->env[i])

@@ -8,7 +8,7 @@
  * Return: 0 on success, 1 on failure
  */
 
-int execute_command(char *command, vars_t *vars)
+int execute_command(char *command, inputs_t *vars)
 {
 	struct stat buf;
 	pid_t child_pid;
@@ -50,12 +50,12 @@ int execute_command(char *command, vars_t *vars)
 }
 
 /**
- * check_for_path - checks if the command is in the PATH or current directory
+ * get_path - checks if the command is in the PATH or current directory
  * @vars: variables
  *
  * Return: void
  */
-void check_for_path(vars_t *vars)
+void get_path(inputs_t *vars)
 {
 	char *path = getenv("PATH");
 	char *command = vars->av[0];
@@ -75,7 +75,7 @@ void check_for_path(vars_t *vars)
 	else if (path != NULL)
 	{
 		path_copy = _strdup(path);
-		token = new_strtok(path_copy, ":");
+		token = _strtok(path_copy, ":");
 		while (token != NULL)
 		{
 			command_path = malloc(strlen(token) + strlen(command) + 2);
@@ -88,7 +88,7 @@ void check_for_path(vars_t *vars)
 				return;
 			}
 			free(command_path);
-			token = new_strtok(NULL, ":");
+			token = _strtok(NULL, ":");
 		}
 		free(path_copy);
 	}

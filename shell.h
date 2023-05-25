@@ -13,7 +13,7 @@
 
 
 /**
- * struct variables - variables
+ * struct inputs - variables
  * @av: command line arguments
  * @buffer: buffer of command
  * @env: environment variables
@@ -22,7 +22,7 @@
  * @commands: commands to be executed
  * @status: exit status
  */
-typedef struct variables
+typedef struct inputs
 {
 	char **av;
 	char *buffer;
@@ -31,7 +31,7 @@ typedef struct variables
 	char **argv;
 	int status;
 	char **commands;
-} vars_t;
+} inputs_t;
 
 /**
  * struct builtins - struct for the builtin functions
@@ -41,45 +41,42 @@ typedef struct variables
 typedef struct builtins
 {
 	char *name;
-	void (*f)(vars_t *);
+	void (*f)(inputs_t *);
 } builtins_t;
 
 /* m_environment.c files */
-char **make_env(char **env);
+char **copy_env(char **env);
 void free_env(char **env);
-void add_key(vars_t *vars);
+void add_key(inputs_t *vars);
 char **find_key(char **env, char *key);
 char *add_value(char *key, char *value);
 
 /* m_helper.c files */
 ssize_t _puts(char *str);
 char *_strdup(char *strtodup);
-int _strcmpr(char *strcmp1, char *strcmp2);
+int _strcmp(char *strcmp1, char *strcmp2);
 char *_strcat(char *strc1, char *strc2);
 unsigned int _strlen(char *str);
 
 /* individual files */
-char **tokenize(char *buffer, char *delimiter);
+char **get_commands(char *buffer, char *delimiter);
 char **_realloc(char **ptr, size_t *size);
-char *new_strtok(char *str, const char *delim);
-void process_input(char *input, vars_t *vars);
+char *_strtok(char *str, const char *delim);
+void process_input(char *input, inputs_t *vars);
 
 /* m_builtins.c files */
-void (*check_for_builtins(vars_t *vars))(vars_t *vars);
-void new_exit(vars_t *vars);
-void _env(vars_t *vars);
-void new_setenv(vars_t *vars);
-void new_unsetenv(vars_t *vars);
+void (*check_for_builtins(inputs_t *vars))(inputs_t *vars);
+void my_exit(inputs_t *vars);
+void _env(inputs_t *vars);
+void _setenv(inputs_t *vars);
+void _unsetenv(inputs_t *vars);
 
 /* m_path.c files */
-void check_for_path(vars_t *vars);
-int path_execute(char *command, vars_t *vars);
-char *find_path(char **env);
-int execute_cwd(vars_t *vars);
-int check_for_dir(char *str);
+void get_path(inputs_t *vars);
+int execute_cmd(char *command, inputs_t *args);
 
 /* m_print.c files */
-void print_error(vars_t *vars, char *msg);
+void print_error(inputs_t *vars, char *msg);
 void _puts2(char *str);
 void print_prompt(void);
 

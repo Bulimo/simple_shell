@@ -5,20 +5,20 @@
  * @vars: variables
  * Return: pointer to the function or NULL
  */
-void (*check_for_builtins(vars_t *vars))(vars_t *vars)
+void (*check_for_builtins(inputs_t *vars))(inputs_t *vars)
 {
 	unsigned int i = 0;
 	builtins_t check[] = {
-		{"exit", new_exit},
+		{"exit", my_exit},
 		{"env", _env},
-		{"setenv", new_setenv},
-		{"unsetenv", new_unsetenv},
+		{"setenv", _setenv},
+		{"unsetenv", _unsetenv},
 		{NULL, NULL}
 	};
 
 	while (check[i].f)
 	{
-		if (_strcmpr(vars->av[0], check[i].name) == 0)
+		if (_strcmp(vars->av[0], check[i].name) == 0)
 			break;
 		i++;
 	}
@@ -28,15 +28,15 @@ void (*check_for_builtins(vars_t *vars))(vars_t *vars)
 }
 
 /**
- * new_exit - exit program
+ * my_exit - exit program
  * @vars: variables
  * Return: void
  */
-void new_exit(vars_t *vars)
+void my_exit(inputs_t *vars)
 {
 	int status;
 
-	if (_strcmpr(vars->av[0], "exit") == 0 && vars->av[1] != NULL)
+	if (_strcmp(vars->av[0], "exit") == 0 && vars->av[1] != NULL)
 	{
 		status = _atoi(vars->av[1]);
 		if (status == -1)
@@ -63,7 +63,7 @@ void new_exit(vars_t *vars)
  * @vars: struct of variables
  * Return: void.
  */
-void _env(vars_t *vars)
+void _env(inputs_t *vars)
 {
 	unsigned int i = 0;
 
@@ -77,12 +77,12 @@ void _env(vars_t *vars)
 }
 
 /**
- * new_setenv - create a new environment variable, or edit an existing variable
+ * _setenv - create a new environment variable, or edit an existing variable
  * @vars: pointer to struct of variables
  *
  * Return: void
  */
-void new_setenv(vars_t *vars)
+void _setenv(inputs_t *vars)
 {
 	char **key;
 	char *var;
@@ -115,12 +115,12 @@ void new_setenv(vars_t *vars)
 }
 
 /**
- * new_unsetenv - remove an environment variable
+ * _unsetenv - remove an environment variable
  * @vars: pointer to a struct of variables
  *
  * Return: void
  */
-void new_unsetenv(vars_t *vars)
+void _unsetenv(inputs_t *vars)
 {
 	char **key, **newenv;
 
@@ -145,7 +145,7 @@ void new_unsetenv(vars_t *vars)
 	{
 		print_error(vars, NULL);
 		vars->status = 127;
-		new_exit(vars);
+		my_exit(vars);
 	}
 	for (i = 0; vars->env[i] != *key; i++)
 		newenv[i] = vars->env[i];

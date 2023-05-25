@@ -45,12 +45,12 @@ char *_strdup(char *strtodup)
 }
 
 /**
- * _strcmpr - compares two strings
+ * _strcmp - compares two strings
  * @strcmp1: first string, of two, to be compared in length
  * @strcmp2: second string, of two, to be compared
  * Return: 0 on success, anything else is a failure
  */
-int _strcmpr(char *strcmp1, char *strcmp2)
+int _strcmp(char *strcmp1, char *strcmp2)
 {
 	int i;
 
