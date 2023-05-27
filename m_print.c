@@ -11,39 +11,39 @@ void print_error(inputs_t *vars, char *msg)
 {
 	char *count;
 
-	_puts2(vars->argv[0]);
-	_puts2(": ");
+	_puts(vars->argv[0]);
+	_puts(": ");
 	count = _uitoa(vars->count);
-	_puts2(count);
+	_puts(count);
 	free(count);
-	_puts2(": ");
-	_puts2(vars->av[0]);
+	_puts(": ");
+	_puts(vars->av[0]);
 	if (msg)
 	{
-		_puts2(msg);
+		_puts(msg);
 	}
 	else
 		perror("");
 }
 
 /**
- * _puts2 - prints a string to standard error
- * @str: string to print
+ * _puts - writes a string to standard output
+ * @str: string to write
  *
- * Return: void
+ * Return: number of chars printed or -1 on failure
  */
-void _puts2(char *str)
+ssize_t _puts(char *str)
 {
 	ssize_t num, len;
 
 	num = _strlen(str);
-	len = write(STDERR_FILENO, str, num);
+	len = write(STDOUT_FILENO, str, num);
 	if (len != num)
 	{
 		perror("Fatal Error");
-		exit(1);
+		return (-1);
 	}
-
+	return (len);
 }
 
 

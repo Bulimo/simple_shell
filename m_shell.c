@@ -23,7 +23,7 @@ static void sig_handler(int uuv)
 int main(int argc __attribute__((unused)), char **argv, char **environment)
 {
 	size_t len_buffer = 0;
-	unsigned int is_pipe = 0;
+	unsigned int is_term = 0;
 	inputs_t vars = {NULL, NULL, NULL, 0, NULL, 0, NULL};
 
 	vars.argv = argv;
@@ -31,10 +31,9 @@ int main(int argc __attribute__((unused)), char **argv, char **environment)
 
 	signal(SIGINT, sig_handler);
 
-	if (!isatty(STDIN_FILENO))
-		is_pipe = 1;
+	is_term = isatty(STDIN_FILENO);
 
-	if (is_pipe == 0)
+	if (is_term)
 		print_prompt();
 
 	while (getline(&(vars.buffer), &len_buffer, stdin) != -1)
@@ -43,11 +42,11 @@ int main(int argc __attribute__((unused)), char **argv, char **environment)
 
 		free(vars.buffer);
 		vars.buffer = NULL;
-		if (is_pipe == 0)
+		if (is_term)
 			print_prompt();
 	}
 
-	if (is_pipe == 0)
+	if (is_term)
 		_puts("\n");
 
 	free_env(vars.env);

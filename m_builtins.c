@@ -1,14 +1,15 @@
 #include "shell.h"
 
 /**
- * check_for_builtins - checks if the command is a builtin
+ * exe_builtin - checks if the command is a builtin
  * @vars: variables
  * Return: pointer to the function or NULL
  */
-void (*check_for_builtins(inputs_t *vars))(inputs_t *vars)
+/*void (*check_for_builtins(inputs_t *vars))(inputs_t *vars)*/
+int exe_builtin(inputs_t *vars)
 {
 	unsigned int i = 0;
-	builtins_t check[] = {
+	builtins_t builtin[] = {
 		{"exit", my_exit},
 		{"env", _env},
 		{"setenv", _setenv},
@@ -16,15 +17,16 @@ void (*check_for_builtins(inputs_t *vars))(inputs_t *vars)
 		{NULL, NULL}
 	};
 
-	while (check[i].f)
+	while (builtin[i].f)
 	{
-		if (_strcmp(vars->av[0], check[i].name) == 0)
-			break;
+		if (_strcmp(vars->av[0], builtin[i].name) == 0)
+		{
+			builtin[i].f(vars);
+			return (0);
+		}
 		i++;
 	}
-	if (check[i].f)
-		check[i].f(vars);
-	return (check[i].f);
+	return (1);
 }
 
 /**
@@ -34,7 +36,7 @@ void (*check_for_builtins(inputs_t *vars))(inputs_t *vars)
  */
 void my_exit(inputs_t *vars)
 {
-	int status;
+	int status = 0;
 
 	if (_strcmp(vars->av[0], "exit") == 0 && vars->av[1] != NULL)
 	{
@@ -43,8 +45,8 @@ void my_exit(inputs_t *vars)
 		{
 			vars->status = 2;
 			print_error(vars, ": Illegal number: ");
-			_puts2(vars->av[1]);
-			_puts2("\n");
+			_puts(vars->av[1]);
+			_puts("\n");
 			free(vars->commands);
 			vars->commands = NULL;
 			return;

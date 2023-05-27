@@ -2,7 +2,7 @@
 
 ## Objectives
 
-	. How does a shell work 
+	. How does a shell work
 	. What is a pid and a ppid
 	. How to manipulate the environment of the current process
 	. What is the difference between a function and a system call
@@ -91,13 +91,16 @@ But also in non-interactive mode:
 
 ## Description of files in the repository
 
-	1. m_addnode.c - adds a new command to linked list of commands
-	2. m_create_path.c - creates a path to an executable file
-	3. m_freenode.c - frees the linked list nodes
-	4. m_getargs.c - creates an array of 
-	5. m_printnode.c - 
-	6. m_putchar.c - prints a char
-	7. m_readlines.c - reads a line from the standard input
-	8. m_shell.c - main simple shell function
-	9. simple_shell.h - header file of the simple shell project
+	1. m_shell.c - main simple shell function
+	2. shell.h - header file of the simple shell project
+	3. m_builtins.c - contains function on execution of builtin commands
+	4. m_char_conversions.c - contains functions to convert from string to unsigned int and vise versa
+	5. m_environment.c - contains function to work on environment variables
+	6. m_get_commands.c - contains functions to extract commands from input
+	7. m_helper.c - contains functions that help in string manupulation
+	8. m_path.c - contains functions to create a path to file and execute the file
+	9. m_print.c - contains functions for printing errors, prompt and general output
+	10. m_process.c - contains function to readline and initiate the path search and execution of a file
+	11. m_realloc.c - contains implementation of realloc function
+	12. m_strtok.c - contains implementation of strtok() function
 

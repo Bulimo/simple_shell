@@ -65,7 +65,8 @@ char *_strtok(char *str, const char *delim);
 void process_input(char *input, inputs_t *vars);
 
 /* m_builtins.c files */
-void (*check_for_builtins(inputs_t *vars))(inputs_t *vars);
+/*void (*check_for_builtins(inputs_t *vars))(inputs_t *vars);*/
+int exe_builtin(inputs_t *vars);
 void my_exit(inputs_t *vars);
 void _env(inputs_t *vars);
 void _setenv(inputs_t *vars);

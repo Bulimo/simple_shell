@@ -1,24 +1,5 @@
 #include "shell.h"
 
-/**
- * _puts - writes a string to standard output
- * @str: string to write
- *
- * Return: number of chars printed or -1 on failure
- */
-ssize_t _puts(char *str)
-{
-	ssize_t num, len;
-
-	num = _strlen(str);
-	len = write(STDOUT_FILENO, str, num);
-	if (len != num)
-	{
-		perror("Fatal Error");
-		return (-1);
-	}
-	return (len);
-}
 
 /**
  * _strdup - returns pointer to new mem alloc space which contains copy
@@ -111,11 +92,12 @@ char *_strcat(char *strc1, char *strc2)
  */
 unsigned int _strlen(char *str)
 {
-	unsigned int len;
+	unsigned int len = 0;
 
-	len = 0;
-
-	for (len = 0; str[len]; len++)
-		;
+	if (str != NULL && *str != '\0')
+	{
+		for (len = 0; str[len]; len++)
+			;
+	}
 	return (len);
 }
