@@ -45,8 +45,8 @@ void my_exit(inputs_t *vars)
 		{
 			vars->status = 2;
 			print_error(vars, ": Illegal number: ");
-			_puts(vars->av[1]);
-			_puts("\n");
+			_puts2(vars->av[1]);
+			_puts2("\n");
 			free(vars->commands);
 			vars->commands = NULL;
 			return;
@@ -137,7 +137,7 @@ void _unsetenv(inputs_t *vars)
 	key = find_key(vars->env, vars->av[1]);
 	if (key == NULL)
 	{
-		print_error(vars, ": No variable to unset");
+		print_error(vars, ": No variable to unset\n");
 		return;
 	}
 	for (i = 0; vars->env[i] != NULL; i++)
@@ -159,3 +159,5 @@ void _unsetenv(inputs_t *vars)
 	vars->env = newenv;
 	vars->status = 0;
 }
+
+
