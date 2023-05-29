@@ -85,4 +85,10 @@ void print_prompt(void);
 char *_uitoa(unsigned int count);
 int _atoi(char *str);
 
+/* m_cd.c files */
+void _cd(inputs_t *vars);
+void change_dir(inputs_t *args, char *pathname);
+int _setenv2(inputs_t *args, const char *name, const char *val, int o_write);
+void print_error2(inputs_t *vars, char *msg);
+
 #endif /* _SHELL_H_ */

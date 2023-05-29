@@ -14,6 +14,7 @@ int exe_builtin(inputs_t *vars)
 		{"env", _env},
 		{"setenv", _setenv},
 		{"unsetenv", _unsetenv},
+		{"cd", _cd},
 		{NULL, NULL}
 	};
 
