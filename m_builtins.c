@@ -39,7 +39,7 @@ void my_exit(inputs_t *vars)
 {
 	int status = 0;
 
-	if (_strcmp(vars->av[0], "exit") == 0 && vars->av[1] != NULL)
+	if (vars->av[1] != NULL)
 	{
 		status = _atoi(vars->av[1]);
 		if (status == -1)

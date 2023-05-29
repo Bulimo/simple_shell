@@ -79,6 +79,7 @@ int execute_cmd(char *command, inputs_t *args);
 /* m_print.c files */
 void print_error(inputs_t *vars, char *msg);
 void _puts2(char *str);
+void print_error2(inputs_t *vars, char *msg);
 void print_prompt(void);
 
 /* m_char_conversion.c*/
@@ -89,6 +90,6 @@ int _atoi(char *str);
 void _cd(inputs_t *vars);
 void change_dir(inputs_t *args, char *pathname);
 int _setenv2(inputs_t *args, const char *name, const char *val, int o_write);
-void print_error2(inputs_t *vars, char *msg);
+char *_getenv(inputs_t *vars, const	char *name);
 
 #endif /* _SHELL_H_ */

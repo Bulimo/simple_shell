@@ -7,18 +7,17 @@
  */
 void _cd(inputs_t *vars)
 {
-	char *home_dir = getenv("HOME"), *pathname = NULL, *pwd = NULL;
+	char *home_dir = _getenv(vars, "HOME"), *pathname = NULL, *pwd = NULL;
 	struct stat sb;
 
-	if (vars->av[1] == NULL)	/* cd command without argument */
-	{
-		pathname = home_dir;
-		change_dir(vars, pathname);
-	}
+	if (vars->av[1] == NULL || vars->av[1][0] == '\0')
+		pathname = home_dir ? _strdup(home_dir) : getcwd(pathname, 0);
 	else if (_strcmp(vars->av[1], "-") == 0)
 	{
-		pathname = getenv("OLDPWD");
-		change_dir(vars, pathname);
+		pathname = (_getenv(vars, "OLDPWD")) ? _strdup(_getenv(vars, "OLDPWD")) :
+					getcwd(pathname, 0);
+		_puts(pathname);
+		_puts("\n");
 	}
 	else
 	{
@@ -30,23 +29,23 @@ void _cd(inputs_t *vars)
 			pathname = _strcat(pwd, vars->av[1]);
 			free(pwd);
 		}
-		if (stat(pathname, &sb) == 0)
-		{
-			if (S_ISDIR(sb.st_mode))
-				change_dir(vars, pathname);
-			else
-			{
-				print_error2(vars, "Not a directory\n");
-				vars->status = 2;
-			}
-		}
+	}
+	if (stat(pathname, &sb) == 0)
+	{
+		if (S_ISDIR(sb.st_mode))
+			change_dir(vars, pathname);
 		else
 		{
-			print_error2(vars, NULL);
+			print_error2(vars, "can't cd to ");
 			vars->status = 2;
 		}
-		free(pathname);
 	}
+	else
+	{
+		print_error2(vars, "can't cd to ");
+		vars->status = 2;
+	}
+	free(pathname);
 }
 
 
@@ -60,6 +59,13 @@ void change_dir(inputs_t *vars, char *pathname)
 	char *old_pwd = NULL;
 
 	old_pwd = getcwd(old_pwd, 0);
+
+	if (access(pathname, R_OK) == -1)
+	{
+		print_error2(vars, "can't cd to ");
+		vars->status = 2;
+		return;
+	}
 
 	if (chdir(pathname) == -1)
 	{
@@ -86,7 +92,11 @@ int _setenv2(inputs_t *vars, const char *name, const char *val, int o_write)
 	int				i = 0;
 	char			*new_envr = NULL;
 	size_t			len = 0, name_len = 0, val_len  = 0;
+	char **env;
 
+	env = copy_env(vars->env);
+	free_env(vars->env);
+	vars->env = env;
 	name_len = strlen(name);
 	val_len = strlen(val);
 	len = 2 + name_len + val_len;
@@ -104,52 +114,42 @@ int _setenv2(inputs_t *vars, const char *name, const char *val, int o_write)
 				free(vars->env[i]);
 				vars->env[i] = new_envr;
 			}
-			else
-			{
-				free(new_envr);
-				new_envr = NULL;
-			}
+			new_envr = NULL;
 			vars->status = 0;
 			return (0);
 		}
 		i++;
 	}
-	vars->env[i++] = new_envr;
-	free(new_envr);
-	vars->env[i] = NULL;
+	vars->env[i] = new_envr;
+	env = copy_env(vars->env);
+	free_env(vars->env);
+	vars->env = env;
 	new_envr = NULL;
 	vars->status = 0;
 	return (0);
 }
 
 /**
- * print_error2 - prints error messages to standard error
- * @vars: pointer to struct of variables
- * @msg: message to print
- *
- * Return: void
- */
-void print_error2(inputs_t *vars, char *msg)
+  * _getenv - gets value of environment variable
+  * @vars: input variables
+  * @name: environment variable to search
+  * Return: value or NULL
+  */
+char *_getenv(inputs_t *vars, const char *name)
 {
-	char *count;
+	int i = 0;
+	char *value = NULL;
+	size_t len = strlen(name);
 
-	_puts2(vars->argv[0]);
-	_puts2(": ");
-	count = _uitoa(vars->count);
-	_puts2(count);
-	free(count);
-	_puts2(": ");
-	_puts2(vars->av[0]);
-	if (vars->av[1])
+	while (vars->env[i])
 	{
-		_puts2(": ");
-		_puts2(vars->av[1]);
-		_puts2(": ");
+		if (strncmp(vars->env[i], name, len) == 0)
+		{
+			value = &(vars->env[i][len + 1]);
+			return (value);
+		}
+		i++;
 	}
-	if (msg)
-		_puts2(msg);
-	else
-	{
-		perror("");
-	}
+	return (NULL);
 }
+

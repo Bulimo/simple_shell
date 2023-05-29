@@ -21,7 +21,9 @@ void print_error(inputs_t *vars, char *msg)
 	if (msg)
 		_puts2(msg);
 	else
+	{
 		perror("");
+	}
 }
 
 /**
@@ -62,6 +64,39 @@ void _puts2(char *str)
 		exit(1);
 	}
 }
+
+/**
+ * print_error2 - prints error messages to standard error
+ * @vars: pointer to struct of variables
+ * @msg: message to print
+ *
+ * Return: void
+ */
+void print_error2(inputs_t *vars, char *msg)
+{
+	char *count;
+
+	_puts2(vars->argv[0]);
+	_puts2(": ");
+	count = _uitoa(vars->count);
+	_puts2(count);
+	free(count);
+	_puts2(": ");
+	_puts2(vars->av[0]);
+	if (msg)
+	{
+		_puts2(": ");
+		_puts2(msg);
+		if (vars->av[1])
+			_puts2(vars->av[1]);
+		_puts2("\n");
+	}
+	else
+	{
+		perror("");
+	}
+}
+
 
 /**
  * print_prompt - prints the shell prompt

@@ -103,4 +103,5 @@ But also in non-interactive mode:
 	10. m_process.c - contains function to readline and initiate the path search and execution of a file
 	11. m_realloc.c - contains implementation of realloc function
 	12. m_strtok.c - contains implementation of strtok() function
+	13. m_cd.c - contains implementation of cd builtin command
 
