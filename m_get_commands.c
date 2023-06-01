@@ -28,7 +28,7 @@ char **get_commands(char *input, char *delimiter)
 		i++;
 		if (i == buffsize)
 		{
-			tokens = _realloc(tokens, &buffsize);
+			tokens = _realloc(tokens, buffsize, 2 * buffsize);
 			if (tokens == NULL)
 			{
 				perror("Fatal Error");
@@ -39,4 +39,3 @@ char **get_commands(char *input, char *delimiter)
 	}
 	return (tokens);
 }
-

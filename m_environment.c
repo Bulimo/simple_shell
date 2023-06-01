@@ -11,6 +11,8 @@ char **copy_env(char **env)
 	char **newenv = NULL;
 	size_t i;
 
+	if (env == NULL)
+		return (NULL);
 	for (i = 0; env[i] != NULL; i++)
 		;
 	newenv = malloc(sizeof(char *) * (i + 1));
@@ -139,4 +141,3 @@ char *add_value(char *key, char *value)
 	new[i + 1 + j] = '\0';
 	return (new);
 }
-

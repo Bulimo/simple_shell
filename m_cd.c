@@ -89,14 +89,10 @@ void change_dir(inputs_t *vars, char *pathname)
  */
 int _setenv2(inputs_t *vars, const char *name, const char *val, int o_write)
 {
-	int				i = 0;
+	size_t			i = 0;
 	char			*new_envr = NULL;
 	size_t			len = 0, name_len = 0, val_len  = 0;
-	char **env;
 
-	env = copy_env(vars->env);
-	free_env(vars->env);
-	vars->env = env;
 	name_len = strlen(name);
 	val_len = strlen(val);
 	len = 2 + name_len + val_len;
@@ -120,12 +116,17 @@ int _setenv2(inputs_t *vars, const char *name, const char *val, int o_write)
 		}
 		i++;
 	}
+	vars->env = _realloc(vars->env, i, i + 2);
+	if (vars->env == NULL)
+	{
+		perror("Fatal error");
+		exit(1);
+	}
 	vars->env[i] = new_envr;
-	env = copy_env(vars->env);
-	free_env(vars->env);
-	vars->env = env;
 	new_envr = NULL;
 	vars->status = 0;
+	i++;
+	vars->env[i] = NULL;
 	return (0);
 }
 
@@ -152,4 +153,3 @@ char *_getenv(inputs_t *vars, const char *name)
 	}
 	return (NULL);
 }
-

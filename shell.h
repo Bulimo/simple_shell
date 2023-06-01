@@ -60,7 +60,7 @@ unsigned int _strlen(char *str);
 
 /* individual files */
 char **get_commands(char *buffer, char *delimiter);
-char **_realloc(char **ptr, size_t *size);
+char **_realloc(char **ptr, size_t old_size, size_t new_size);
 char *_strtok(char *str, const char *delim);
 void process_input(char *input, inputs_t *vars);
 
