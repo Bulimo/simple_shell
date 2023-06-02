@@ -57,6 +57,8 @@ void my_exit(inputs_t *vars)
 	free(vars->buffer);
 	free(vars->av);
 	free(vars->commands);
+	free(vars->str_cmd);
+	free(vars->ops_cmd);
 	free_env(vars->env);
 	exit(vars->status);
 }
@@ -107,6 +109,8 @@ void _setenv(inputs_t *vars)
 			print_error(vars, NULL);
 			free(vars->buffer);
 			free(vars->commands);
+			free(vars->str_cmd);
+			free(vars->ops_cmd);
 			free(vars->av);
 			free_env(vars->env);
 			exit(127);

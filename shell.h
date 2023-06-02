@@ -21,6 +21,8 @@
  * @argv: arguments at opening of shell
  * @commands: commands to be executed
  * @status: exit status
+ * @str_cmd: copy of individual commands separated by ;
+ * @ops_cmd: string of commands separated by logical operators
  */
 typedef struct inputs
 {
@@ -31,6 +33,8 @@ typedef struct inputs
 	char **argv;
 	int status;
 	char **commands;
+	char *str_cmd;
+	char **ops_cmd;
 } inputs_t;
 
 /**
@@ -62,7 +66,12 @@ unsigned int _strlen(char *str);
 char **get_commands(char *buffer, char *delimiter);
 char **_realloc(char **ptr, size_t old_size, size_t new_size);
 char *_strtok(char *str, const char *delim);
+
+/* m_process.c file */
 void process_input(char *input, inputs_t *vars);
+int run_command(inputs_t *vars, char *cmd_str);
+char get_operator(char *command, unsigned int *index);
+void check_logical_ops(inputs_t *vars, char *cmd_str);
 
 /* m_builtins.c files */
 /*void (*check_for_builtins(inputs_t *vars))(inputs_t *vars);*/
