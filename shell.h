@@ -23,6 +23,7 @@
  * @status: exit status
  * @str_cmd: copy of individual commands separated by ;
  * @ops_cmd: string of commands separated by logical operators
+ * @aliases: contains the alias commands
  */
 typedef struct inputs
 {
@@ -35,6 +36,7 @@ typedef struct inputs
 	char **commands;
 	char *str_cmd;
 	char **ops_cmd;
+	char **aliases;
 } inputs_t;
 
 /**
@@ -94,11 +96,19 @@ void print_prompt(void);
 /* m_char_conversion.c*/
 char *_uitoa(unsigned int count);
 int _atoi(char *str);
+int _chrcmp(char a, char b);
 
 /* m_cd.c files */
 void _cd(inputs_t *vars);
 void change_dir(inputs_t *args, char *pathname);
 int _setenv2(inputs_t *args, const char *name, const char *val, int o_write);
 char *_getenv(inputs_t *vars, const	char *name);
+
+/* m_alias.c file */
+int check_name_match(inputs_t *vars, unsigned int i, unsigned int k);
+void update_alias(inputs_t *vars, unsigned int k);
+void _alias(inputs_t *vars);
+void print_alias(inputs_t *vars);
+void free_commands(inputs_t *vars);
 
 #endif /* _SHELL_H_ */

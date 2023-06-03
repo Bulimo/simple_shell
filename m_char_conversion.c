@@ -58,4 +58,14 @@ char *_uitoa(unsigned int count)
 	}
 	return (numstr);
 }
+/**
+ * _chrcmp - compares characters
+ * @a: first character
+ * @b: second character
+ * Return: 0 if match, difference if does not match
+ */
 
+int _chrcmp(char a, char b)
+{
+	return (a - b);
+}
