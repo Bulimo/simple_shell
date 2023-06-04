@@ -77,10 +77,7 @@ void add_key(inputs_t *vars)
 	if (newenv[i] == NULL)
 	{
 		print_error(vars, NULL);
-		free(vars->buffer);
-		free(vars->commands);
-		free(vars->av);
-		free_env(vars->env);
+		free_commands(vars);
 		free(newenv);
 		exit(127);
 	}

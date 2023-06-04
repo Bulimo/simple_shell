@@ -115,25 +115,3 @@ void print_alias(inputs_t *vars)
 	}
 }
 
-/**
- * free_commands - frees alias commands/inputs
- * @vars: contains struct members
- */
-
-void free_commands(inputs_t *vars)
-{
-	unsigned int i = 0;
-
-	free(vars->buffer);
-	free(vars->commands);
-	free(vars->str_cmd);
-	free(vars->ops_cmd);
-	free(vars->av);
-	free_env(vars->env);
-	if (vars->aliases != NULL)
-	{
-		while (vars->aliases[i] != NULL)
-			free(vars->aliases[i]);
-		free(vars->aliases);
-	}
-}

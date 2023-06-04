@@ -1,49 +1,61 @@
 #include "shell.h"
 /**
- * _echo - prints on the terminal
+ * sub_env - substitutes the environment variables
  * @vars: contains members of the struct
  */
 
-void _echo(inputs_t *vars)
+void sub_env(inputs_t *vars)
 {
+	size_t i = 0;
+	char **av_copy = copy_env(vars->av);
 	pid_t pid = getpid();
-	char buff_pid[32];
-	char buff_status[3];
 	char *path = NULL, *env = NULL;
-	int p = sprintf(buff_pid, "%d", pid);
-	int s = sprintf(buff_status, "%d", vars->status);
-	int i = 1;
 
-	while (vars->av[i] != NULL)
+
+	while (av_copy != NULL && av_copy[i] != NULL)
 	{
-		if (i > 1)
-			_puts(" ");
-		if (vars->av[i][0] == '$')
+		if (_strcmp(av_copy[i], "$?") == 0)
 		{
-			if (vars->av[i][1] == '?')
-			{
-				write(STDOUT_FILENO, buff_status, s);
-			}
-
-			else if (vars->av[i][1] == '$')
-			{
-				write(STDOUT_FILENO, buff_pid, p);
-			}
-
+			vars->av[i] = _malloc(32);
+			sprintf(vars->av[i], "%d", vars->status);
+		}
+		else if (_strcmp(av_copy[i], "$$") == 0)
+		{
+			vars->av[i] = _malloc(32);
+			sprintf(vars->av[i], "%d", pid);
+		}
+		else if (av_copy[i][0] == '$' && av_copy[i][1] != '\0')
+		{
+			path = &(av_copy[i][1]);
+			env = _getenv(vars, path);
+			if (env)
+				vars->av[i] = _strdup(env);
 			else
-			{
-				path = &(vars->av[i][1]);
-				env = _getenv(vars, path);
-
-				if (env)
-					_puts(env);
-			}
+				vars->av[i] = _strdup("");
 		}
 		else
-			_puts(vars->av[i]);
+			vars->av[i] = _strdup(av_copy[i]);
 		i++;
 	}
+	free_av_and_alias(av_copy);
+}
 
-	_puts("\n");
-	vars->status = 0;
+
+/**
+  * free_av_and_alias - free av commands
+  * @s: vars->av or vars->alias inputs
+  * Return: nothing
+  */
+void free_av_and_alias(char **s)
+{
+	size_t i = 0;
+
+	if (s == NULL)
+		return;
+	while (s[i])
+	{
+		free(s[i]);
+		i++;
+	}
+	free(s);
 }

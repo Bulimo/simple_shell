@@ -25,3 +25,21 @@ char **_realloc(char **ptr, size_t old_size, size_t new_size)
 	free(ptr);
 	return (new_ptr);
 }
+
+/**
+  * _malloc - allocates a specific size of memeory
+  * @size: size of memory to create
+  * Return: pointer to allocated memory
+  */
+char *_malloc(size_t size)
+{
+	char *buff = NULL;
+
+	buff = malloc(sizeof(char) * size);
+	if (buff == NULL)
+	{
+		perror("Fatal error");
+		exit(1);
+	}
+	return (buff);
+}

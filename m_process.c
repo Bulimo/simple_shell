@@ -79,10 +79,13 @@ int run_command(inputs_t *vars, char *cmd_str)
 	/* extract command & options, store in a string array */
 	vars->av = get_commands(cmd_str, "\n \t\r");
 	if (vars->av && vars->av[0])
+	{
+		sub_env(vars);
 		/*if (check_for_builtins(vars) == NULL)*/
 		if (exe_builtin(vars))
 			get_path(vars);
-	free(vars->av);
+	}
+	free_av_and_alias(vars->av);
 	return (vars->status);
 }
 

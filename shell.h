@@ -50,6 +50,9 @@ typedef struct builtins
 	void (*f)(inputs_t *);
 } builtins_t;
 
+/* m_shell.c files */
+void free_commands(inputs_t *vars);
+
 /* m_environment.c files */
 char **copy_env(char **env);
 void free_env(char **env);
@@ -66,9 +69,15 @@ unsigned int _strlen(char *str);
 
 /* individual files */
 char **get_commands(char *buffer, char *delimiter);
-char **_realloc(char **ptr, size_t old_size, size_t new_size);
 char *_strtok(char *str, const char *delim);
-void _echo(inputs_t *vars);
+
+/* m_echo.c files */
+void sub_env(inputs_t *vars);
+void free_av_and_alias(char **s);
+
+/* m_realloc.c files*/
+char **_realloc(char **ptr, size_t old_size, size_t new_size);
+char *_malloc(size_t size);
 
 /* m_process.c file */
 void process_input(char *input, inputs_t *vars);
@@ -77,7 +86,6 @@ char get_operator(char *command, unsigned int *index);
 void check_logical_ops(inputs_t *vars, char *cmd_str);
 
 /* m_builtins.c files */
-/*void (*check_for_builtins(inputs_t *vars))(inputs_t *vars);*/
 int exe_builtin(inputs_t *vars);
 void my_exit(inputs_t *vars);
 void _env(inputs_t *vars);
@@ -110,6 +118,5 @@ int check_name_match(inputs_t *vars, unsigned int i, unsigned int k);
 void update_alias(inputs_t *vars, unsigned int k);
 void _alias(inputs_t *vars);
 void print_alias(inputs_t *vars);
-void free_commands(inputs_t *vars);
 
 #endif /* _SHELL_H_ */

@@ -54,3 +54,19 @@ int main(int argc __attribute__((unused)), char **argv, char **environment)
 	exit(vars.status);
 }
 
+/**
+ * free_commands - frees alias commands/inputs
+ * @vars: contains struct members
+ */
+
+void free_commands(inputs_t *vars)
+{
+	free(vars->buffer);
+	free(vars->commands);
+	free(vars->str_cmd);
+	free(vars->ops_cmd);
+	free_av_and_alias(vars->av);
+	free_env(vars->env);
+	free_av_and_alias(vars->aliases);
+}
+
