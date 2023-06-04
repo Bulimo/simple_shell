@@ -47,13 +47,14 @@ int check_name_match(inputs_t *vars, unsigned int i, unsigned int k)
 {
 	unsigned int j = 0;
 
-	while (vars->aliases[i][j] != '=')
+	while (vars->aliases[i][j] != '\0' && vars->aliases[i][j] != '=')
 	{
 		if (_chrcmp(vars->av[k][j], vars->aliases[i][j]) == 0)
 		{
 			j++;
 			return (1);
 		}
+		j++;
 	}
 	return (0);
 }
@@ -131,7 +132,7 @@ void free_commands(inputs_t *vars)
 	free_env(vars->env);
 	if (vars->aliases != NULL)
 	{
-		while (vars->aliases[i])
+		while (vars->aliases[i] != NULL)
 			free(vars->aliases[i]);
 		free(vars->aliases);
 	}

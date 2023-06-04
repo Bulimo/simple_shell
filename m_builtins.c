@@ -16,6 +16,7 @@ int exe_builtin(inputs_t *vars)
 		{"unsetenv", _unsetenv},
 		{"cd", _cd},
 		{"alias", _alias},
+		{"echo", _echo},
 		{NULL, NULL}
 	};
 
