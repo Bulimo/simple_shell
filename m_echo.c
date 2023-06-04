@@ -9,25 +9,41 @@ void _echo(inputs_t *vars)
 	pid_t pid = getpid();
 	char buff_pid[32];
 	char buff_status[3];
-	char *path = _getenv(vars, "PATH");
+	char *path = NULL, *env = NULL;
 	int p = sprintf(buff_pid, "%d", pid);
 	int s = sprintf(buff_status, "%d", vars->status);
+	int i = 1;
 
-	if ((strncmp(vars->av[1], "$?", 2)) == 0)
+	while (vars->av[i] != NULL)
 	{
-		write(STDOUT_FILENO, buff_status, s);
-		_puts("\n");
+		if (i > 1)
+			_puts(" ");
+		if (vars->av[i][0] == '$')
+		{
+			if (vars->av[i][1] == '?')
+			{
+				write(STDOUT_FILENO, buff_status, s);
+			}
+
+			else if (vars->av[i][1] == '$')
+			{
+				write(STDOUT_FILENO, buff_pid, p);
+			}
+
+			else
+			{
+				path = &(vars->av[i][1]);
+				env = _getenv(vars, path);
+
+				if (env)
+					_puts(env);
+			}
+		}
+		else
+			_puts(vars->av[i]);
+		i++;
 	}
 
-	else if ((strncmp(vars->av[1], "$$", 2)) == 0)
-	{
-		write(STDOUT_FILENO, buff_pid, p);
-		_puts("\n");
-	}
-
-	else if ((strncmp(vars->av[1], "$PATH", 5)) == 0)
-	{
-		_puts(path);
-		_puts("\n");
-	}
+	_puts("\n");
+	vars->status = 0;
 }
