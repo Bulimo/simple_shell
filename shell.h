@@ -67,9 +67,16 @@ int _strcmp(char *strcmp1, char *strcmp2);
 char *_strcat(char *strc1, char *strc2);
 unsigned int _strlen(char *str);
 
-/* individual files */
-char **get_commands(char *buffer, char *delimiter);
+/* m_strtok.c files */
 char *_strtok(char *str, const char *delim);
+unsigned int check_match(char c, const char *str);
+char *_strcpy(char *dest, char *src);
+
+/* m_get_commands.c files */
+char **get_commands(char *buffer, char *delimiter);
+char **get_aliases(char *buffer, char *delimeter);
+int char_found(char c, const char *del);
+char *alias_strtok(char *str, const char *del);
 
 /* m_echo.c files */
 void sub_env(inputs_t *vars);
@@ -118,5 +125,6 @@ int check_name_match(inputs_t *vars, unsigned int i, unsigned int k);
 void update_alias(inputs_t *vars, unsigned int k);
 void _alias(inputs_t *vars);
 void print_alias(inputs_t *vars);
+void sub_alias(inputs_t *vars);
 
 #endif /* _SHELL_H_ */

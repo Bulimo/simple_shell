@@ -104,4 +104,6 @@ But also in non-interactive mode:
 	11. m_realloc.c - contains implementation of realloc function
 	12. m_strtok.c - contains implementation of strtok() function
 	13. m_cd.c - contains implementation of cd builtin command
+	14. m_echo.c - contains function to implement environment substitutions
+	15. m_alias.c - contains functions to implement alias built in command
 

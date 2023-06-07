@@ -115,3 +115,41 @@ void print_alias(inputs_t *vars)
 	}
 }
 
+
+/**
+ * sub_alias - substitutes alias for commands
+ * @vars: contains members of the struct
+ */
+void sub_alias(inputs_t *vars)
+{
+	size_t i = 0, j = 0, k = 0, len = 0;
+	char alias_copy[1024];
+
+	while (vars->aliases != NULL && vars->aliases[i] != NULL)
+	{
+		len = _strlen(vars->av[0]);
+		if (strncmp(vars->aliases[i], vars->av[0], len) == 0)
+		{
+			for (j = len, k = 0; vars->aliases[i][j]; j++)
+			{
+				if (vars->aliases[i][j] == '=' || vars->aliases[i][j] == '\'')
+					continue;
+				else
+				{
+					alias_copy[k] = vars->aliases[i][j];
+					k++;
+				}
+			}
+			alias_copy[k] = '\0';
+			free(vars->av[0]);
+			vars->av[0] = malloc(sizeof(char) * _strlen(alias_copy) + 1);
+			if (vars->av[0] == NULL)
+			{
+				perror("Fatal error");
+				exit(1);
+			}
+			vars->av[0] = _strcpy(vars->av[0], alias_copy);
+		}
+		i++;
+	}
+}

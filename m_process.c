@@ -25,10 +25,10 @@ void process_input(char *input, inputs_t *vars)
 }
 
 /**
-  * check_logical_ops - executes according to logical operators
-  * @vars: input variables struct
-  * @cmd_str: current command
-  */
+ * check_logical_ops - executes according to logical operators
+ * @vars: input variables struct
+ * @cmd_str: current command
+ */
 void check_logical_ops(inputs_t *vars, char *cmd_str)
 {
 	unsigned int j = 0, index = 0;
@@ -69,18 +69,24 @@ void check_logical_ops(inputs_t *vars, char *cmd_str)
 }
 
 /**
-  * run_command - gets command with arguments and calls executing function
-  * @vars: input variables struct
-  * @cmd_str: current command
-  * Return: status after execution
-  */
+ * run_command - gets command with arguments and calls executing function
+ * @vars: input variables struct
+ * @cmd_str: current command
+ * Return: status after execution
+ */
 int run_command(inputs_t *vars, char *cmd_str)
 {
+	size_t len = _strlen("alias");
+
 	/* extract command & options, store in a string array */
-	vars->av = get_commands(cmd_str, "\n \t\r");
+	if (strncmp(cmd_str, "alias", len) == 0)
+		vars->av = get_aliases(cmd_str, "\n \t\r");
+	else
+		vars->av = get_commands(cmd_str, "\n \t\r");
 	if (vars->av && vars->av[0])
 	{
 		sub_env(vars);
+		sub_alias(vars);
 		/*if (check_for_builtins(vars) == NULL)*/
 		if (exe_builtin(vars))
 			get_path(vars);
@@ -90,11 +96,11 @@ int run_command(inputs_t *vars, char *cmd_str)
 }
 
 /**
-  * get_operator - check for logical operators in a line of command
-  * @command: current command
-  * @index: pointer to the logical operator index in command string
-  * Return: the type of logical operator
-  */
+ * get_operator - check for logical operators in a line of command
+ * @command: current command
+ * @index: pointer to the logical operator index in command string
+ * Return: the type of logical operator
+ */
 char get_operator(char *command, unsigned int *index)
 {
 	unsigned int i = *index;
