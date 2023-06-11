@@ -50,6 +50,7 @@ int main(int argc __attribute__((unused)), char **argv, char **environment)
 		_puts("\n");
 
 	free_env(vars.env);
+	free_av_and_alias((&vars)->aliases);
 	free(vars.buffer);
 	exit(vars.status);
 }
