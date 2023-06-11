@@ -98,3 +98,23 @@ unsigned int _strlen(char *str)
 		;
 	return (len);
 }
+
+/**
+ * print_vars - prints vars variables
+ * @variable: contains a double pointer member of struct
+ */
+void print_vars(char **variable)
+{
+	unsigned int i = 0;
+
+	if (variable != NULL)
+	{
+		while (variable[i] != NULL)
+		{
+			_puts(variable[i]);
+			_puts("\n");
+			i++;
+		}
+	}
+}
+

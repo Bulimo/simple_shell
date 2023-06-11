@@ -61,11 +61,11 @@ char **find_key(char **env, char *key);
 char *add_value(char *key, char *value);
 
 /* m_helper.c files */
-ssize_t _puts(char *str);
 char *_strdup(char *strtodup);
 int _strcmp(char *strcmp1, char *strcmp2);
 char *_strcat(char *strc1, char *strc2);
 unsigned int _strlen(char *str);
+void print_vars(char **str);
 
 /* m_strtok.c files */
 char *_strtok(char *str, const char *delim);
@@ -105,6 +105,7 @@ int execute_cmd(char *command, inputs_t *args);
 
 /* m_print.c files */
 void print_error(inputs_t *vars, char *msg);
+ssize_t _puts(char *str);
 void _puts2(char *str);
 void print_error2(inputs_t *vars, char *msg);
 void print_prompt(void);
@@ -121,10 +122,10 @@ int _setenv2(inputs_t *args, const char *name, const char *val, int o_write);
 char *_getenv(inputs_t *vars, const	char *name);
 
 /* m_alias.c file */
-int check_name_match(inputs_t *vars, unsigned int i, unsigned int k);
+int check_name_match(char *an_alias, char *input);
 void update_alias(inputs_t *vars, unsigned int k);
 void _alias(inputs_t *vars);
-void print_alias(inputs_t *vars);
+char *store_alias(char *str);
 void sub_alias(inputs_t *vars);
 
 #endif /* _SHELL_H_ */

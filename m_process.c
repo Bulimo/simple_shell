@@ -79,7 +79,7 @@ int run_command(inputs_t *vars, char *cmd_str)
 	size_t len = _strlen("alias");
 
 	/* extract command & options, store in a string array */
-	if (strncmp(cmd_str, "alias", len) == 0)
+	if ((strncmp(cmd_str, "alias", len) == 0) && (cmd_str[len] == ' '))
 		vars->av = get_aliases(cmd_str, "\n \t\r");
 	else
 		vars->av = get_commands(cmd_str, "\n \t\r");

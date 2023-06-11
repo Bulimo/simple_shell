@@ -66,14 +66,7 @@ void my_exit(inputs_t *vars)
  */
 void _env(inputs_t *vars)
 {
-	unsigned int i = 0;
-
-	while (vars->env[i])
-	{
-		_puts(vars->env[i]);
-		_puts("\n");
-		i++;
-	}
+	print_vars(vars->env);
 	vars->status = 0;
 }
 

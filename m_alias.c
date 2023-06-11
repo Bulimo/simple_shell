@@ -9,7 +9,7 @@ void _alias(inputs_t *vars)
 	unsigned int i = 0, k = 1;
 
 	if (vars->av[1] == NULL)
-		print_alias(vars);
+		print_vars(vars->aliases);
 	else
 	{
 		while (vars->av[k])
@@ -20,7 +20,7 @@ void _alias(inputs_t *vars)
 			{
 				while (vars->aliases[i])
 				{
-					if (check_name_match(vars, i, k))
+					if (check_name_match(vars->aliases[i], vars->av[k]))
 					{
 						_puts(vars->aliases[i]);
 						_puts("\n");
@@ -38,24 +38,22 @@ void _alias(inputs_t *vars)
 
 /**
  * check_name_match - checks if av name matches aliases
- * @vars: contains struct members
- * @i: vars->alias at the position
- * @k: vars->av at the position
+ * @an_alias: an alias string in vars-aliases
+ * @input: a command string in vars->av
  * Return: 1 if match, 0 if no match
  */
-int check_name_match(inputs_t *vars, unsigned int i, unsigned int k)
+int check_name_match(char *an_alias, char *input)
 {
-	unsigned int j = 0;
+	unsigned int len = 0, i = 0;
 
-	while (vars->aliases[i][j] != '\0' && vars->aliases[i][j] != '=')
+	for (i = 0; input[i]; i++)
 	{
-		if (_chrcmp(vars->av[k][j], vars->aliases[i][j]) == 0)
-		{
-			j++;
-			return (1);
-		}
-		j++;
+		if (input[i] == '=')
+			break;
+		len++;
 	}
+	if ((strncmp(an_alias, input, len) == 0) && (an_alias[len] == '='))
+		return (1);
 	return (0);
 }
 
@@ -75,10 +73,10 @@ void update_alias(inputs_t *vars, unsigned int k)
 	{
 		while (vars->aliases[i])
 		{
-			if (check_name_match(vars, i, k))
+			if (check_name_match(vars->aliases[i], vars->av[k]))
 			{
 				free(vars->aliases[i]);
-				vars->aliases[i] = _strdup(vars->av[k]);
+				vars->aliases[i] = store_alias(vars->av[k]);
 				return;
 			}
 			i++;
@@ -91,28 +89,41 @@ void update_alias(inputs_t *vars, unsigned int k)
 		perror("Fatal Error");
 		exit(1);
 	}
-	vars->aliases[i] = _strdup(vars->av[k]);
+	vars->aliases[i] = store_alias(vars->av[k]);
 	i++;
 	vars->aliases[i] = NULL;
 }
 
 /**
- * print_alias - prints alias commands if av[1] is NULL
- * @vars: contains members of the struct
+ * store_alias - stores an alias with quotes in
+ * @str: string to be stored
+ * Return: a copy of the string with quotes embeded
  */
-void print_alias(inputs_t *vars)
+char *store_alias(char *str)
 {
-	unsigned int i = 0;
+	unsigned int i = 0, j = 0;
+	char copy[1024];
 
-	if (vars->aliases != NULL)
+	if (str != NULL)
 	{
-		while (vars->aliases[i] != NULL)
+		for (i = 0, j = 0; str[i]; i++)
 		{
-			_puts(vars->aliases[i]);
-			_puts("\n");
-			i++;
+			if (str[i] != '\'' && str[i] != '\"')
+			{
+				copy[j] = str[i];
+				j++;
+			}
+			if (str[i] == '=')
+			{
+				copy[j] = '\'';
+				j++;
+			}
 		}
+		copy[j++] = '\'';
+		copy[j] = '\0';
+		return (_strdup(copy));
 	}
+	return (NULL);
 }
 
 
@@ -125,10 +136,10 @@ void sub_alias(inputs_t *vars)
 	size_t i = 0, j = 0, k = 0, len = 0;
 	char alias_copy[1024];
 
+	len = _strlen(vars->av[0]);
 	while (vars->aliases != NULL && vars->aliases[i] != NULL)
 	{
-		len = _strlen(vars->av[0]);
-		if (strncmp(vars->aliases[i], vars->av[0], len) == 0)
+		if (check_name_match(vars->aliases[i], vars->av[0]))
 		{
 			for (j = len, k = 0; vars->aliases[i][j]; j++)
 			{
@@ -149,6 +160,8 @@ void sub_alias(inputs_t *vars)
 				exit(1);
 			}
 			vars->av[0] = _strcpy(vars->av[0], alias_copy);
+			sub_alias(vars);
+			return;
 		}
 		i++;
 	}
